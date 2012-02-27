@@ -1,5 +1,7 @@
 #!/bin/bash
-. config.sh
+if [ -f config.sh ]; then
+  . config.sh
+fi
 git checkout gh-pages
 wget $ICAL_URI -O private.ics
 # Simplify SUMMARY and drop DESCRIPTION
