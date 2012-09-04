@@ -1,5 +1,4 @@
 #!/bin/bash
-export ICAL_URI='http://example.com/hoge.ics'
 export REMOTE_GIT=git@github.com:foo/bar.git
 export COMMENT='auto commit'
 export INTERACTIVE=true
