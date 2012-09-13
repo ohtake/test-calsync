@@ -2,9 +2,9 @@
 $public = (Join-Path (pwd) "public.ics")
 
 $outlook = New-Object -ComObject Outlook.Application
-$folder = $outlook.Session.GetDefaultFolder(9) # olFolderCalendar = 9
+$folder = $outlook.Session.GetDefaultFolder([Microsoft.Office.Interop.Outlook.OlDefaultFolders]::olFolderCalendar)
 $exporter = $folder.GetCalendarExporter()
-$exporter.CalendarDetail = 2 # olFullDetails = 2
+$exporter.CalendarDetail = [Microsoft.Office.Interop.Outlook.OlCalendarDetail]::olFullDetails
 $exporter.EndDate = [DateTime]::Now.Date.AddMonths(2)
 $exporter.SaveAsICal($private)
 
@@ -26,16 +26,19 @@ function normalize-ical([string[]]$lines) {
     }
 }
 function replace-summary([string]$str) {
-    if ($str -match "^SUMMARY:\[TW\] (.)?.*") {
-        return "SUMMARY:[TW] " + $Matches[1]
-    } elseif ($str -match "^SUMMARY(?:;[^;:]*)*:(.)?.*") {
-        return "SUMMARY:" + $Matches[1]
+    if ($str -match "^SUMMARY(;[^;:]*)*:(.*)") {
+        $length = 1
+        $attrib = $Matches[1]
+        $value = $Matches[2]
+        if($value -match "^\[TW\] ") {$length += 5}
+        if($value.Length -gt $length) {$value = $value.Substring(0, $length)}
+        return "SUMMARY${attrib}:$value"
     } else {
         return $str
     }
 }
 function is-description([string]$str) {
-    $str -match "^(?:DESCRIPTION:|X-ALT-DESC[;:])"
+    $str -match "^(?:DESCRIPTION|X-ALT-DESC)[;:]"
 }
 
 $lines = cat $private -Encoding UTF8
