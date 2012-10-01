@@ -45,5 +45,12 @@ $lines = cat $private -Encoding UTF8
 $lines = normalize-ical $lines
 $lines = $lines |% {replace-summary($_)}
 $lines = $lines |? {(is-description($_)) -eq $false}
-$lines | Out-File -Encoding UTF8 $public
+$lines |% -Begin {
+    # UTF-8N
+    $writer = New-Object System.IO.StreamWriter -ArgumentList @($public, $false, (New-Object System.Text.UTF8Encoding $false))
+} -Process {
+    $writer.WriteLine($_)
+} -End {
+    $writer.Close()
+}
 
