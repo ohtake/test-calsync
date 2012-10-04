@@ -40,11 +40,15 @@ function replace-summary([string]$str) {
 function is-description([string]$str) {
     $str -match "^(?:DESCRIPTION|X-ALT-DESC)[;:]"
 }
+function contains-username([string]$str) {
+    $str -match "^(?:ATTENDEE|ORGANIZER)[;:]"
+}
 
 $lines = cat $private -Encoding UTF8
 $lines = normalize-ical $lines
 $lines = $lines |% {replace-summary($_)}
 $lines = $lines |? {(is-description($_)) -eq $false}
+$lines = $lines |? {(contains-username($_)) -eq $false}
 $lines |% -Begin {
     # UTF-8N
     $writer = New-Object System.IO.StreamWriter -ArgumentList @($public, $false, (New-Object System.Text.UTF8Encoding $false))
