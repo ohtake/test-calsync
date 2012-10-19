@@ -41,7 +41,7 @@ function is-description([string]$str) {
     $str -match "^(?:DESCRIPTION|X-ALT-DESC)[;:]"
 }
 function contains-username([string]$str) {
-    $str -match "^(?:ATTENDEE|ORGANIZER)[;:]"
+    $str -match "^(?:ATTENDEE|ORGANIZER|X-MS-OLK-SENDER)[;:]"
 }
 
 $lines = cat $private -Encoding UTF8
