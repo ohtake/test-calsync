@@ -30,7 +30,6 @@ function replace-summary([string]$str) {
         $length = 1
         $attrib = $Matches[1]
         $value = $Matches[2]
-        if($value -match "^\[TW\] ") {$length += 5}
         if($value.Length -gt $length) {$value = $value.Substring(0, $length)}
         return "SUMMARY${attrib}:$value"
     } else {
