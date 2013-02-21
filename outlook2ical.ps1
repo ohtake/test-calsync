@@ -48,12 +48,8 @@ $lines = normalize-ical $lines
 $lines = $lines |% {replace-summary($_)}
 $lines = $lines |? {(is-description($_)) -eq $false}
 $lines = $lines |? {(contains-username($_)) -eq $false}
-$lines |% -Begin {
-    # UTF-8N
-    $writer = New-Object System.IO.StreamWriter -ArgumentList @($public, $false, (New-Object System.Text.UTF8Encoding $false))
-} -Process {
-    $writer.WriteLine($_)
-} -End {
-    $writer.Close()
-}
+
+# Use UTF-8N since Google Calendar does not support UTF-8 with BOM
+$encoding = New-Object System.Text.UTF8Encoding $false
+[IO.File]::WriteAllLines($public, $lines, $encoding)
 
