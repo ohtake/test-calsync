@@ -5,7 +5,7 @@ $outlook = New-Object -ComObject Outlook.Application
 $folder = $outlook.Session.GetDefaultFolder([Microsoft.Office.Interop.Outlook.OlDefaultFolders]::olFolderCalendar)
 $exporter = $folder.GetCalendarExporter()
 $exporter.CalendarDetail = [Microsoft.Office.Interop.Outlook.OlCalendarDetail]::olFullDetails
-$exporter.EndDate = [DateTime]::Now.Date.AddMonths(2)
+$exporter.EndDate = [DateTime]::Now.Date.AddYears(1)
 $exporter.SaveAsICal($private)
 
 function normalize-ical([string[]]$lines) {
