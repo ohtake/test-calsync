@@ -3,7 +3,7 @@ if [ -f config.sh ]; then
   . config.sh
 fi
 git checkout gh-pages
-powershell.exe outlook2ical.ps1
+powershell.exe -File outlook2ical.ps1
 git add -N public.ics
 git add public.ics `[ "$INTERACTIVE" = "true" ] && echo "-p"`
 git commit -m "$COMMENT"
